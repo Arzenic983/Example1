@@ -10,16 +10,20 @@ class Example(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('UI.ui', self)
-        self.flag = 0
-        self.pushButton.clicked.connect(self.Flag)
+        self.flag = False
+        self.pushButton.clicked.connect(self.pressEvent)
 
     def paintEvent(self, e):
-        if self.flag == 1:
-            qp = QPainter()
-            qp.begin(self)
-            self.drawCircle(qp)
-            qp.end()
-            self.show()
+        if self.flag:
+            self.flag = False
+            self.qp = QPainter()
+            self.qp.begin(self)
+            self.drawCircle(self.qp)
+            self.qp.end()
+
+    def pressEvent(self):
+        self.flag = True
+        self.update()
 
     def drawCircle(self, qp):
         qp.setBrush(Qt.yellow)
@@ -30,9 +34,6 @@ class Example(QMainWindow):
                 random.randint(10, 590),
                 size, size
             )
-
-    def Flag(self):
-        self.flag = 1
 
 
 if __name__ == '__main__':
